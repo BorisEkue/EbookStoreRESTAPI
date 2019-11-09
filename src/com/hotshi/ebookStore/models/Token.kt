@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.hotshi.com.hotshi.ebookStore.models.interfaces.IToken
 import com.hotshi.com.hotshi.ebookStore.utils.LocalDateTimeDeserializer
 import com.hotshi.com.hotshi.ebookStore.utils.LocalDateTimeSerializer
-import org.joda.time.DateTime
+import java.time.Duration
 import java.time.LocalDateTime
 
 data class Token(
@@ -18,4 +18,10 @@ data class Token(
     @JsonSerialize(using = LocalDateTimeSerializer::class)
     @JsonDeserialize(using = LocalDateTimeDeserializer::class )
     override val createdAt: LocalDateTime
-) : IToken
+) : IToken {
+
+    /**
+     * Token expires if it has more than 30 days
+     */
+    fun isExpired() = Duration.between(this.createdAt, LocalDateTime.now()).toDays() > 30
+}

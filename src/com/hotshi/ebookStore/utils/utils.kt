@@ -17,3 +17,11 @@ fun toDateTime(localDateTime: LocalDateTime): DateTime {
         .withDate(localDateTime.year, localDateTime.monthValue, localDateTime.dayOfMonth)
         .withTime(localDateTime.hour, localDateTime.minute, localDateTime.second, localDateTime.second)
 }
+
+fun toLocalDateTime(dateTime: DateTime): LocalDateTime {
+    val dateTimeUtc = dateTime.withZone(DateTimeZone.UTC)
+    return LocalDateTime.of(
+        dateTimeUtc.year, dateTimeUtc.monthOfYear, dateTimeUtc.dayOfMonth,
+        dateTimeUtc.hourOfDay, dateTimeUtc.minuteOfHour, dateTimeUtc.secondOfMinute
+    )
+}

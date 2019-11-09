@@ -21,7 +21,7 @@ fun error(httpStatusCode: HttpStatusCode, call: ApplicationCall, errorDescriptio
     val errorNode = ObjectMapper().createObjectNode()
 
     errorNode.put("status", httpStatusCode.value)
-    errorNode.put("uri", call.request.uri)
+    errorNode.put("uri", call.request.uri )
     errorNode.put("error", httpStatusCode.description)
     errorNode.put("error_description", errorDescription)
     return errorNode
