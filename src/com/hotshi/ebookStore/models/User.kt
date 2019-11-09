@@ -9,5 +9,5 @@ data class User(
     override val lastName: String,
     override val email: String,
     override val password: String,
-    override val roles: ArrayList<IRole>
+    override var roles: List<IRole>? = null
 ) : IUser

@@ -6,5 +6,5 @@ interface IUser {
     val lastName: String
     val email: String
     val password: String
-    val roles: ArrayList<IRole>
+    val roles: List<IRole>?
 }
