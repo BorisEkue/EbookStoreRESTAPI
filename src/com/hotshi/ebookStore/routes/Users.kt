@@ -25,8 +25,7 @@ fun Route.usersRoutes(userRepository: IUserRepository, roleRepository: IRoleRepo
             userAuthenticate(call, this, userService, userKey)
         }
 
-
-
+        // Buyer routes
         get("/{id_user}") {
             val idUser = call.parameters["id_user"]
             idUser?.let {
@@ -37,5 +36,9 @@ fun Route.usersRoutes(userRepository: IUserRepository, roleRepository: IRoleRepo
                 } ?: call.respond(error(HttpStatusCode.NotFound, call, "User not found"))
             } ?: call.respond(error( HttpStatusCode.NotFound, call, "id_user can not be empty") )
         }
+
+
+
+
     }
 }

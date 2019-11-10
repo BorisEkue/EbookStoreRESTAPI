@@ -5,8 +5,13 @@ import java.time.LocalDateTime
 interface IEBook {
     val idBook: String
     val title: String
-    val authorsId: ArrayList<String>
+    val author: String
     val publishedDate: LocalDateTime
     val description: String
     val isbn: String
+    val category: String
+    val fileName: String?
+    val fileURL: String?
+    val thumbnail: String?
+    val uploadedAt: LocalDateTime
 }

@@ -10,4 +10,7 @@ data class User(
     override val email: String,
     override val password: String,
     override var roles: List<IRole>? = null
-) : IUser
+) : IUser {
+    fun  hasRole(roleName: String): Boolean = roles!!.any { it.name == roleName }
+
+}

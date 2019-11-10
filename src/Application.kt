@@ -13,9 +13,11 @@ import org.slf4j.event.*
 import io.ktor.util.date.*
 import com.fasterxml.jackson.databind.*
 import com.hotshi.com.hotshi.ebookStore.initDatabase
+import com.hotshi.com.hotshi.ebookStore.repository.EBookRepository
 import com.hotshi.com.hotshi.ebookStore.repository.RoleRepository
 import com.hotshi.com.hotshi.ebookStore.repository.TokenRepository
 import com.hotshi.com.hotshi.ebookStore.repository.UserRepository
+import com.hotshi.com.hotshi.ebookStore.repository.interfaces.IEbookRepository
 import com.hotshi.com.hotshi.ebookStore.repository.interfaces.IRoleRepository
 import com.hotshi.com.hotshi.ebookStore.repository.interfaces.ITokenRepository
 import com.hotshi.com.hotshi.ebookStore.repository.interfaces.IUserRepository
@@ -85,11 +87,12 @@ fun Application.module(testing: Boolean = false) {
     val userRepository: IUserRepository = UserRepository()
     val tokenRepository: ITokenRepository = TokenRepository()
     val roleRepository: IRoleRepository = RoleRepository()
+    val ebookRepository: IEbookRepository = EBookRepository()
 
 
     // Routes initialization
     install(Routing) {
-        setup(userRepository, tokenRepository, roleRepository)
+        setup(userRepository, tokenRepository, roleRepository, ebookRepository)
     }
 
     routing {
