@@ -10,8 +10,10 @@ interface IEBook {
     val description: String
     val isbn: String
     val category: String
+    val price: Int
     val fileName: String?
     val fileURL: String?
     val thumbnail: String?
-    val uploadedAt: LocalDateTime
+    val uploadedAt: LocalDateTime?
+    val idUser: String
 }

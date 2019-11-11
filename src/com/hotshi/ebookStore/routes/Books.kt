@@ -2,6 +2,7 @@ package com.hotshi.com.hotshi.ebookStore.routes
 
 import com.hotshi.com.hotshi.ebookStore.authentication.userAuthenticate
 import com.hotshi.com.hotshi.ebookStore.http.error
+import com.hotshi.com.hotshi.ebookStore.http.response
 import com.hotshi.com.hotshi.ebookStore.models.EBook
 import com.hotshi.com.hotshi.ebookStore.models.RoleType
 import com.hotshi.com.hotshi.ebookStore.models.User
@@ -16,14 +17,18 @@ import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
+import io.ktor.locations.get
+import io.ktor.request.path
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
+import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.util.AttributeKey
 import java.io.File
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun Route.booksRoutes(userRepository: IUserRepository, roleRepository: IRoleRepository, eBookRepository: IEbookRepository) {
     route("/ebooks") {
@@ -74,24 +79,49 @@ fun Route.booksRoutes(userRepository: IUserRepository, roleRepository: IRoleRepo
                     idBook = generateIdByCustomer("e", user.idUser),
                     title = title,
                     author = author,
-                    publishedDate = LocalDateTime.parse(publishedDate),
+                    publishedDate = LocalDateTime.parse(publishedDate, DateTimeFormatter.ISO_DATE_TIME),
                     description = description,
                     isbn = isbn,
                     category = category,
                     fileName = fileName,
                     fileURL = fileURL,
                     thumbnail = thumbnail,
-                    uploadedAt = LocalDateTime.now()
+                    uploadedAt = LocalDateTime.now(),
+                    idUser = user.idUser
                 )
 
                 // Save the ebook
-                ebookService.save(ebook, user)
+                ebookService.save(ebook)
 
-
-                call.respond("$title/$ext/$author/$publishedDate/$description/$isbn/$category")
+                //call.respond("$title/$ext/$author/$publishedDate/$description/$isbn/$category")
+                call.respond(response(HttpStatusCode.OK, call, "ebook", ebook))
             } else
                 call.respond(error(HttpStatusCode.Unauthorized, call, "You donn't have permission to upload ebooks!"))
 
         }
+
+        get("/{id_ebook}") {
+            val idEbook = call.parameters["id_ebook"]
+
+            idEbook?.let {
+                val ebook = ebookService.findById(idEbook)
+                ebook?.let {
+                    call.respond(response(HttpStatusCode.OK, call, "ebook", ebook))
+                } ?: call.respond(error(HttpStatusCode.NotFound, call, "Ebook not found"))
+            } ?: call.respond(error( HttpStatusCode.NotFound, call, "id_ebook can not be empty") )
+        }
+
+        get("/all") {
+            val ebooks = ebookService.all("all")
+            call.respond(response(HttpStatusCode.OK, call, "ebooks", ebooks))
+        }
+
+        get("/all/{category}") {
+            val category = call.parameters["category"] ?: ""
+            val ebooks = ebookService.all(category)
+            call.respond(response(HttpStatusCode.OK, call, "ebooks", ebooks))
+        }
+
+
     }
 }
